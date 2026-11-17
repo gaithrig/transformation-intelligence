@@ -3,46 +3,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Transformation Intelligence | Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transformation Intelligence | Gaithri Ganesan</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
 <style>
 :root{
---bg:#0b1423;--side:#111e30;--panel:#14243a;
---border:#2b4059;--text:#e9eff8;--muted:#a2b5cb;
---teal:#18a68e;--blue:#3c8db5;--amber:#e9a23b;
---red:#d85d69;--purple:#9278d7
+  --bg:#0b1423;--side:#111e30;--panel:#14243a;
+  --border:#2b4059;--text:#e9eff8;--muted:#a2b5cb;
+  --teal:#18a68e;--blue:#3c8db5;--amber:#e9a23b;
+  --red:#d85d69;--purple:#9278d7
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-aside{position:fixed;left:0;top:0;bottom:0;width:235px;background:var(--side);padding:25px 15px;border-right:1px solid var(--border);overflow:auto}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 Arial,sans-serif}
+aside{position:fixed;inset:0 auto 0 0;width:235px;background:var(--side);padding:25px 15px;border-right:1px solid var(--border);overflow:auto}
 .brand{font-size:20px;font-weight:bold;line-height:1.3}
 .brand span{color:#52d7c1}
 .muted,small{color:var(--muted);font-size:12px}
 nav{margin-top:28px}
-nav button{width:100%;text-align:left;padding:13px;border:0;background:none;color:#c2d1e2;cursor:pointer;border-radius:8px;margin:3px 0}
+nav button{display:block;width:100%;text-align:left;padding:13px;border:0;background:none;color:#c2d1e2;cursor:pointer;border-radius:8px;margin:3px 0}
 nav button.active,nav button:hover{background:#21415c;color:white}
 main{margin-left:235px;padding:30px;max-width:1800px}
 h1{font-size:28px;margin:8px 0}
 h3{font-size:15px;margin:0 0 16px}
-.eyebrow{font-size:11px;letter-spacing:2px;color:#51d6c0;text-transform:uppercase}
+.eyebrow,.section-label{font-size:11px;letter-spacing:1.5px;color:#51d6c0;text-transform:uppercase}
 .top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}
-.tag{border:1px solid #3b536d;border-radius:20px;padding:9px;font-size:11px;white-space:nowrap}
+.tag{border:1px solid #3b536d;border-radius:20px;padding:9px;font-size:11px}
 .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:16px 0}
 .card,.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:19px;min-width:0}
-.card strong{display:block;font-size:26px;margin:12px 0 6px;overflow-wrap:anywhere}
+.card strong{display:block;font-size:24px;margin:12px 0 6px;overflow-wrap:anywhere}
 .card em{font-size:11px;color:#58d6bb;font-style:normal}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}
-.chartbox{height:300px;position:relative}
+.chartbox{height:310px;position:relative}
 .chartbox canvas{max-height:100%;max-width:100%}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #2b4059;vertical-align:top}
-th{color:#9fb5ce}
+.chart-hint{text-align:center;font-size:11px;color:#8faac2;margin-top:8px}
 .tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{color:#9fb5ce}
 select,.btn{background:#1b3048;color:white;border:1px solid #405874;border-radius:8px;padding:11px;cursor:pointer}
 .btn:hover{background:#275075}
-.filters{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap}
-.status{display:inline-block;padding:5px 9px;border-radius:18px;font-size:11px;white-space:nowrap}
+.filters,.filterbar{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;align-items:center}
+.filterbar{background:#17334a;border:1px solid #315b70;border-radius:10px;padding:12px 15px;justify-content:space-between}
+.status{display:inline-block;padding:5px 9px;border-radius:18px;font-size:11px}
 .good{background:#123d37;color:#5ce2bd}
 .warn{background:#4b361d;color:#ffc76d}
 .bad{background:#4b252e;color:#ff8e9c}
@@ -50,13 +55,12 @@ select,.btn{background:#1b3048;color:white;border:1px solid #405874;border-radiu
 .clickable:hover{background:#213b54}
 .progress{height:9px;background:#2b4059;border-radius:10px;overflow:hidden}
 .progress span{display:block;height:100%;background:var(--teal)}
-.timeline{border-left:3px solid #3c8db5;margin-left:18px;padding-left:25px}
+.timeline{border-left:3px solid var(--blue);margin-left:18px;padding-left:25px}
 .phase{position:relative;padding:8px 0 24px}
 .phase:before{content:"✓";position:absolute;left:-43px;top:5px;background:#226ca4;color:white;width:31px;height:31px;border-radius:50%;display:grid;place-items:center;font-weight:bold}
 .phase.pending:before{content:"•";background:#45546a}
 .phase.active:before{content:"→";background:var(--amber)}
-.phase strong{font-size:13px}
-.phase p{font-size:11px;color:var(--muted);line-height:1.7}
+.phase p{font-size:11px;color:var(--muted)}
 .team{display:flex;gap:20px;flex-wrap:wrap}
 .member{text-align:center;min-width:100px}
 .avatar{height:49px;width:49px;border-radius:50%;display:grid;place-items:center;background:#214b65;border:2px solid var(--teal);margin:0 auto 9px;font-weight:bold}
@@ -69,56 +73,61 @@ select,.btn{background:#1b3048;color:white;border:1px solid #405874;border-radiu
 .gantt .risk{background:#b47d31}
 .gantt .late{background:#a8495a}
 .notice{border-left:3px solid var(--teal);padding:15px;background:#152b40;border-radius:7px;color:#b8cadc;font-size:13px;margin:15px 0;line-height:1.7}
-.measure-value{font-weight:bold;color:#56dac3;white-space:nowrap}
-.formula{color:#b9cae0;font-family:Consolas,monospace;font-size:12px}
-.insight{padding:12px 15px;margin:8px 0;background:#192d43;border-left:3px solid var(--blue);border-radius:5px;font-size:13px;line-height:1.6}
-.section-label{font-size:11px;letter-spacing:1px;color:#58d6bb;text-transform:uppercase;margin-bottom:10px}
-.site-footer{text-align:center;padding:24px 15px;margin-top:35px;border-top:1px solid #2b4059;color:#a9c4dd;font-size:12px;line-height:1.9}
-.site-footer strong{color:#fff}
+.insight{padding:12px 15px;margin:8px 0;background:#192d43;border-left:3px solid var(--blue);border-radius:5px;font-size:13px}
+.measure-value{font-weight:bold;color:#56dac3}
+.formula{color:#b9cae0;font:12px Consolas,monospace}
+.site-footer{text-align:center;padding:24px 15px;margin-top:35px;border-top:1px solid var(--border);color:#a9c4dd;font-size:12px;line-height:1.9}
+.site-footer strong{color:white}
 .site-footer .disclaimer{font-size:11px;color:#849bb4}
+.error{background:#43232d;border:1px solid #d85d69;border-radius:10px;padding:18px;color:#ffe0e5}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:800px){aside{position:relative;width:100%;height:auto}main{margin:0;padding:17px}.grid2{grid-template-columns:1fr}.top{flex-direction:column;align-items:flex-start}}
 @media(max-width:500px){.cards{grid-template-columns:1fr}}
 </style>
 </head>
+
 <body>
 <aside>
-<div class="brand">Transformation<br><span>Intelligence</span></div>
-<p class="muted">Analytics • Governance • Automation</p>
-<nav>
-<button class="active" onclick="go('overview',this)">⌂ Overview</button>
-<button onclick="go('projects',this)">▦ Project Portfolio</button>
-<button onclick="go('pnl',this)">◫ Profit & Loss</button>
-<button onclick="go('funding',this)">◈ Funding & Grants</button>
-<button onclick="go('automation',this)">⚙ Automation Impact</button>
-<button onclick="go('executive',this)">▤ Executive Scorecard</button>
-</nav>
-<div class="panel" style="margin-top:35px">
-<strong style="font-size:12px">Portfolio Demonstration</strong>
-<p class="muted">All project, financial, grant and personnel data are synthetic and do not represent employer or government records.</p>
-</div>
+  <div class="brand">Transformation<br><span>Intelligence</span></div>
+  <p class="muted">Analytics • Governance • Automation</p>
+  <nav>
+    <button data-page="overview" onclick="go('overview')">⌂ Overview</button>
+    <button data-page="projects" onclick="go('projects')">▦ Project Portfolio</button>
+    <button data-page="pnl" onclick="go('pnl')">◫ Profit & Loss</button>
+    <button data-page="funding" onclick="go('funding')">◈ Funding & Grants</button>
+    <button data-page="automation" onclick="go('automation')">⚙ Automation Impact</button>
+    <button data-page="executive" onclick="go('executive')">▤ Executive Scorecard</button>
+  </nav>
+  <div class="panel" style="margin-top:35px">
+    <strong style="font-size:12px">Portfolio Demonstration</strong>
+    <p class="muted">All project, financial, grant and personnel data are synthetic and do not represent employer or government records.</p>
+  </div>
 </aside>
 
 <main>
-<div class="top">
-<div>
-<div class="eyebrow">Interactive Demonstration Portfolio</div>
-<h1 id="title">Business Intelligence & Digital Transformation</h1>
-<p class="muted" id="subtitle">Financial intelligence, project governance and intelligent automation</p>
-</div>
-<div class="tag">SYNTHETIC DATA · FY2026</div>
-</div>
-<div id="content"></div>
+  <div class="top">
+    <div>
+      <div class="eyebrow">Interactive Demonstration Portfolio</div>
+      <h1 id="title">Business Intelligence & Digital Transformation</h1>
+      <p class="muted">Financial intelligence, project governance and intelligent automation</p>
+    </div>
+    <div class="tag">SYNTHETIC DATA · FY2026</div>
+  </div>
 
-<footer class="site-footer">
-<strong>Prepared &amp; Developed by Gaithri Ganesan</strong>
-<div>© 2026 Gaithri Ganesan. All rights reserved.</div>
-<div>Digital Transformation • Business Intelligence • Portfolio Governance</div>
-<div class="disclaimer">Demonstration dashboards use synthetic data.</div>
-</footer>
+  <div id="content"></div>
+
+  <footer class="site-footer">
+    <strong>Prepared &amp; Developed by Gaithri Ganesan</strong>
+    <div>© 2026 Gaithri Ganesan. All rights reserved.</div>
+    <div>Digital Transformation • Business Intelligence • Portfolio Governance</div>
+    <div class="disclaimer">Demonstration dashboards use synthetic data.</div>
+  </footer>
 </main>
 
 <script>
+"use strict";
+
+/* DATA */
 const projects=[
 {id:"P001",name:"Finance Automation",category:"Finance",status:"On Track",budget:450000,actual:320000,progress:75,start:"2026-01-15",end:"2026-12-15",risk:2,overdue:0,countries:["Singapore","Malaysia"],owner:"Alex Tan",scope:"Automate financial reporting and approval workflows."},
 {id:"P002",name:"ERP Transformation",category:"Digital",status:"At Risk",budget:1200000,actual:1050000,progress:60,start:"2026-02-01",end:"2027-03-31",risk:5,overdue:3,countries:["Singapore","Malaysia","Thailand"],owner:"Jamie Lee",scope:"Modernise enterprise processes, data integration and ERP operations."},
@@ -129,12 +138,10 @@ const projects=[
 {id:"P007",name:"Workflow Optimisation",category:"Operations",status:"At Risk",budget:270000,actual:240000,progress:65,start:"2026-05-01",end:"2027-02-28",risk:4,overdue:2,countries:["Thailand","Vietnam"],owner:"Maya Chen",scope:"Reduce manual handoffs and improve process cycle times."},
 {id:"P008",name:"Research Funding Portal",category:"Research",status:"Delayed",budget:750000,actual:680000,progress:45,start:"2026-01-01",end:"2026-09-30",risk:5,overdue:5,countries:["Singapore"],owner:"Ryan Koh",scope:"Create a central funding application and disbursement portal."}
 ];
-
 const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"];
 const revenue=[610,640,690,660,720,750,790,770,830,860];
 const costs=[440,455,475,480,500,515,540,550,570,595];
 const revBudget=[590,610,650,670,680,710,750,760,790,820];
-
 const grants=[
 {name:"Research Excellence",approved:4200000,committed:3500000,disbursed:2900000},
 {name:"Innovation Development",approved:2800000,committed:2100000,disbursed:1700000},
@@ -142,7 +149,6 @@ const grants=[
 {name:"Industry Collaboration",approved:1800000,committed:1300000,disbursed:950000},
 {name:"Capability Development",approved:1300000,committed:950000,disbursed:700000}
 ];
-
 const workflows=[
 {name:"Grant Approval",runs:1250,success:97.5,hours:520},
 {name:"PR Approval",runs:2100,success:98.8,hours:740},
@@ -150,7 +156,6 @@ const workflows=[
 {name:"Invoice Processing",runs:1850,success:96.4,hours:680},
 {name:"Access Provisioning",runs:930,success:98.1,hours:390}
 ];
-
 const phases=[
 ["A – Ideation","Business opportunity identified"],
 ["B – Evaluation","Feasibility evaluation"],
@@ -163,456 +168,617 @@ const phases=[
 ["I – Hypercare","Post-go-live support"],
 ["J – Closure","Handover and project closure"]
 ];
-
-const color={teal:"#18a68e",blue:"#3c8db5",amber:"#e9a23b",red:"#d85d69",purple:"#9278d7"};
+const colors={teal:"#18a68e",blue:"#3c8db5",amber:"#e9a23b",red:"#d85d69",purple:"#9278d7"};
+const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
 const money=n=>"S$"+(n/1000000).toFixed(2)+"M";
-const dollars=n=>"S$"+n.toLocaleString("en-SG",{maximumFractionDigits:0});
-const total=(a,k)=>a.reduce((s,x)=>s+x[k],0);
-const pct=n=>n.toFixed(1)+"%";
-const signedMoney=n=>(n>=0?"+":"-")+dollars(Math.abs(n));
-const kpi=(a,b)=>`<div class="card"><small>${a}</small><strong>${b}</strong><em>FY2026 · Demo</em></div>`;
-const panel=(t,b)=>`<div class="panel"><h3>${t}</h3>${b}</div>`;
-const cv=id=>`<div class="chartbox"><canvas id="${id}"></canvas></div>`;
-const badge=s=>`<span class="status ${s==="On Track"?"good":s==="At Risk"?"warn":"bad"}">${s}</span>`;
+const dollars=n=>"S$"+Math.round(n).toLocaleString("en-SG");
+const pct=n=>(Number.isFinite(n)?n:0).toFixed(1)+"%";
+const signed=n=>(n>=0?"+":"-")+dollars(Math.abs(n));
+const number=n=>Number(n).toLocaleString("en-SG",{maximumFractionDigits:1});
+const card=(label,value)=>`<div class="card"><small>${label}</small><strong>${value}</strong><em>FY2026 · Demo</em></div>`;
+const panel=(title,body)=>`<section class="panel"><h3>${title}</h3>${body}</section>`;
+const canvas=id=>`<div class="chartbox"><canvas id="${id}"></canvas></div><div class="chart-hint">Click a data point to filter or drill down</div>`;
+const statusBadge=s=>`<span class="status ${s==="On Track"?"good":s==="At Risk"?"warn":"bad"}">${s}</span>`;
+const insights=items=>items.map(t=>`<div class="insight">${t}</div>`).join("");
 
-let page="overview",charts=[],selected=null;
+let page="overview",selected=null,charts=[];
+let projectStatus="All Statuses",projectCategory="All Categories";
+const filter={projects:null,pnl:[],funding:null,automation:null};
 
-function plot(id,type,labels,datasets,opts={}){
-const el=document.getElementById(id);if(!el)return;
-const base={
-responsive:true,maintainAspectRatio:false,
-plugins:{legend:{labels:{color:"#aabdd2"}}}
-};
-if(!["doughnut","pie"].includes(type)){
-base.scales={
-x:{ticks:{color:"#aabdd2"},grid:{color:"#26384d"}},
-y:{ticks:{color:"#aabdd2"},grid:{color:"#26384d"}}
-};
-}
-charts.push(new Chart(el,{
-type,data:{labels,datasets},
-options:{...base,...opts}
-}));
+/* CHART INITIALISATION */
+const hasChart=typeof Chart!=="undefined";
+const hasLabels=hasChart&&typeof ChartDataLabels!=="undefined";
+if(hasLabels)Chart.register(ChartDataLabels);
+
+function valueLabel(value,context){
+  if(value===null||value===undefined)return "";
+  if(typeof value==="object")return "";
+  const chart=context.chart;
+  if(["doughnut","pie"].includes(chart.config.type)){
+    const total=chart.data.datasets[context.datasetIndex].data.reduce((s,v)=>s+Number(v),0);
+    return total?Math.round(value/total*100)+"%":"";
+  }
+  const id=chart.canvas.id;
+  const label=context.dataset.label||"";
+  if(id==="pl3"||id==="f4"||id==="e1"||label.includes("%"))return Number(value).toFixed(1)+"%";
+  if(Math.abs(value)>=1000000)return (value/1000000).toFixed(2)+"M";
+  if(Math.abs(value)>=10000)return (value/1000).toFixed(0)+"K";
+  return number(value);
 }
 
-function measureTable(rows){
-return `<div class="tablewrap"><table>
-<thead><tr><th>Measure</th><th>Formula / Definition</th><th>Calculated Result</th><th>Business Interpretation</th></tr></thead>
-<tbody>${rows.map(r=>`<tr>
-<td><strong>${r[0]}</strong></td>
-<td class="formula">${r[1]}</td>
-<td class="measure-value">${r[2]}</td>
-<td>${r[3]||""}</td>
-</tr>`).join("")}</tbody></table></div>`;
+function plot(id,type,labels,datasets,extra={}){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(!hasChart){
+    el.parentElement.innerHTML='<p class="error">Chart.js could not load. Check your internet connection and refresh.</p>';
+    return;
+  }
+  const circular=type==="doughnut"||type==="pie";
+  const defaults={
+    responsive:true,maintainAspectRatio:false,
+    layout:{padding:{top:30,right:30,bottom:12}},
+    plugins:{
+      legend:{labels:{color:"#aabdd2"}},
+      datalabels:{
+        display:hasLabels,
+        color:"#eaf4ff",
+        font:{size:10,weight:"bold"},
+        anchor:circular?"center":"end",
+        align:circular?"center":"top",
+        clamp:true,
+        formatter:valueLabel
+      }
+    }
+  };
+  if(!circular){
+    defaults.scales={
+      x:{ticks:{color:"#aabdd2"},grid:{color:"#26384d"}},
+      y:{ticks:{color:"#aabdd2"},grid:{color:"#26384d"}}
+    };
+  }
+  const options={
+    ...defaults,...extra,
+    plugins:{
+      ...defaults.plugins,...(extra.plugins||{}),
+      datalabels:{
+        ...defaults.plugins.datalabels,
+        ...((extra.plugins||{}).datalabels||{})
+      }
+    }
+  };
+  options.onClick=(event,elements,chart)=>{
+    if(elements.length)chartClick(id,elements[0].index,chart);
+  };
+  options.onHover=(event,elements,chart)=>{
+    chart.canvas.style.cursor=elements.length?"pointer":"default";
+  };
+  charts.push(new Chart(el,{type,data:{labels,datasets},options}));
 }
-function insights(items){
-return items.map(x=>`<div class="insight">${x}</div>`).join("");
+
+/* NAVIGATION AND FILTERING */
+function go(destination){
+  page=destination;
+  const titles={
+    overview:"Business Intelligence & Digital Transformation",
+    projects:"Project Portfolio Command Centre",
+    pnl:"Profit & Loss Intelligence",
+    funding:"Financial & Funding Intelligence",
+    automation:"Automation Performance",
+    executive:"Executive Portfolio Scorecard"
+  };
+  document.getElementById("title").textContent=titles[page]||"Project Detail Dashboard";
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+  render();
+  window.scrollTo(0,0);
 }
-function go(p,btn){
-page=p;
-document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-if(btn)btn.classList.add("active");
-const titles={
-overview:"Business Intelligence & Digital Transformation",
-projects:"Project Portfolio Command Centre",
-pnl:"Profit & Loss Intelligence",
-funding:"Financial & Funding Intelligence",
-automation:"Automation Performance",
-executive:"Executive Portfolio Scorecard"
-};
-document.getElementById("title").textContent=titles[p]||"Project Detail Dashboard";
-render();
-window.scrollTo(0,0);
-}
+
 function render(){
-charts.forEach(c=>c.destroy());charts=[];
-const el=document.getElementById("content");
-if(page==="overview")overview(el);
-if(page==="projects")portfolio(el);
-if(page==="detail")detail(el);
-if(page==="pnl")pnl(el);
-if(page==="funding")funding(el);
-if(page==="automation")automation(el);
-if(page==="executive")executive(el);
+  try{
+    charts.forEach(c=>c.destroy());
+    charts=[];
+    const el=document.getElementById("content");
+    if(page==="overview")overview(el);
+    else if(page==="projects")portfolio(el);
+    else if(page==="detail")detail(el);
+    else if(page==="pnl")pnl(el);
+    else if(page==="funding")funding(el);
+    else if(page==="automation")automation(el);
+    else if(page==="executive")executive(el);
+  }catch(error){
+    console.error("Dashboard rendering error:",error);
+    document.getElementById("content").innerHTML=
+      `<div class="error"><strong>Dashboard error</strong><p>${error.message}</p><p>Press F12 and check the Console for details.</p></div>`;
+  }
 }
 
+function filterBar(area){
+  const value=filter[area];
+  const display=Array.isArray(value)?(value.length?value.join(", "):"All months"):(value===null?"All records":value);
+  return `<div class="filterbar"><span>Interactive filter: <strong>${display}</strong></span><button class="btn" onclick="clearFilter('${area}')">Clear Filters ×</button></div>`;
+}
+
+function clearFilter(area){
+  filter[area]=area==="pnl"?[]:null;
+  if(area==="projects"){projectStatus="All Statuses";projectCategory="All Categories";}
+  render();
+}
+
+function chartClick(id,index,chart){
+  const label=chart.data.labels[index];
+  if(id==="ov1"||id==="e2"){
+    projectStatus=label;projectCategory="All Categories";filter.projects=null;go("projects");return;
+  }
+  if(id==="ov2"||id==="e3"){
+    filter.pnl=[label];go("pnl");return;
+  }
+  if(id==="e1"){
+    go(["pnl","projects","funding","automation"][index]||"overview");return;
+  }
+  if(id==="e4"){filter.funding=label;go("funding");return;}
+  if(id==="pr1"){
+    projectStatus=projectStatus===label?"All Statuses":label;
+    filter.projects=null;render();return;
+  }
+  if(id==="pr2"||id==="pr3"){
+    filter.projects=filter.projects===label?null:label;render();return;
+  }
+  if(id==="pr4"){
+    const d=filteredProjects();
+    if(d[index]){filter.projects=d[index].name;render();}
+    return;
+  }
+  if(id.startsWith("pl")){
+    filter.pnl=filter.pnl.includes(label)?filter.pnl.filter(m=>m!==label):[...filter.pnl,label];
+    render();return;
+  }
+  if(["f1","f2","f4"].includes(id)){
+    filter.funding=filter.funding===label?null:label;render();return;
+  }
+  if(id.startsWith("a")){
+    filter.automation=filter.automation===label?null:label;render();
+  }
+}
+
+/* OVERVIEW */
 function overview(el){
-const portfolioBudget=total(projects,"budget");
-const grantFunding=total(grants,"approved");
-const runs=total(workflows,"runs");
-el.innerHTML=`
-<div class="notice">A demonstration of integrated business planning, financial governance, project portfolio management and intelligent automation. Explore each dashboard using the navigation menu.</div>
-<div class="cards">
-${kpi("Portfolio Projects",projects.length)}
-${kpi("Portfolio Budget",money(portfolioBudget))}
-${kpi("Total Grant Funding",money(grantFunding))}
-${kpi("Automated Transactions",runs.toLocaleString())}
-</div>
-<div class="grid2">
-${panel("Portfolio Delivery Health",cv("ov1"))}
-${panel("Financial Performance Trend",cv("ov2"))}
-</div>
-<div class="grid2">
-${panel("Capabilities","<p class='scope'>Project & Portfolio Governance<br>Financial Planning & Analysis<br>Funding and Grant Management<br>Power BI, Power Automate and Python</p>")}
-${panel("Explore the Portfolio","<p class='scope'>Use the sidebar to review project delivery, financial performance, funding utilisation and automation benefits.<br><br>Each dashboard uses a distinct analytical layout. Click a project in the register to open its detailed delivery dashboard.</p>")}
-</div>`;
-plot("ov1","doughnut",["On Track","At Risk","Delayed"],[{data:[4,2,2],backgroundColor:[color.teal,color.amber,color.red]}]);
-plot("ov2","line",months,[
-{label:"Revenue (S$000)",data:revenue,borderColor:color.blue,tension:.3},
-{label:"Operating Profit (S$000)",data:revenue.map((v,i)=>v-costs[i]),borderColor:color.teal,tension:.3}
-]);
+  const totalRevenue=revenue.reduce((a,b)=>a+b,0)*1000;
+  const totalProfit=revenue.reduce((a,b,i)=>a+b-costs[i],0)*1000;
+  el.innerHTML=`
+    <div class="notice">An interactive demonstration of business planning, financial governance, portfolio management and intelligent automation. Click any chart to explore.</div>
+    <div class="cards">
+      ${card("Portfolio Projects",projects.length)}
+      ${card("Portfolio Budget",money(sum(projects,"budget")))}
+      ${card("Total Grant Funding",money(sum(grants,"approved")))}
+      ${card("Automated Transactions",number(sum(workflows,"runs")))}
+    </div>
+    <div class="grid2">
+      ${panel("Portfolio Delivery Health",canvas("ov1"))}
+      ${panel("Financial Performance Trend",`
+        <div style="display:flex;gap:30px;flex-wrap:wrap;margin-bottom:15px">
+          <div><small>Total Revenue · Jan–Oct</small><strong style="display:block;font-size:22px;color:#3c8db5">${dollars(totalRevenue)}</strong></div>
+          <div><small>Total Operating Profit · Jan–Oct</small><strong style="display:block;font-size:22px;color:#18a68e">${dollars(totalProfit)}</strong></div>
+        </div>
+        ${canvas("ov2")}
+      `)}
+    </div>
+    <div class="grid2">
+      ${panel("Core Capabilities",`<p class="scope">Project & Portfolio Governance<br>Financial Planning & Analysis<br>Funding and Grant Management<br>Power BI, Power Automate and Python</p>`)}
+      ${panel("Explore the Portfolio",`<p class="scope">Use the sidebar or click a chart to explore project delivery, financial performance, funding utilisation and automation benefits.</p>`)}
+    </div>`;
+  const statuses=["On Track","At Risk","Delayed"];
+  plot("ov1","doughnut",statuses,[{data:statuses.map(s=>projects.filter(p=>p.status===s).length),backgroundColor:[colors.teal,colors.amber,colors.red]}]);
+  plot("ov2","line",months,[
+    {label:"Revenue (S$000)",data:revenue,borderColor:colors.blue,tension:.3},
+    {label:"Operating Profit (S$000)",data:revenue.map((v,i)=>v-costs[i]),borderColor:colors.teal,tension:.3}
+  ]);
 }
 
+/* PROJECT PORTFOLIO */
+function filteredProjects(){
+  return projects.filter(p=>
+    (projectStatus==="All Statuses"||p.status===projectStatus)&&
+    (projectCategory==="All Categories"||p.category===projectCategory)&&
+    (filter.projects===null||p.name===filter.projects)
+  );
+}
+function changePortfolioFilters(){
+  projectStatus=document.getElementById("sf").value;
+  projectCategory=document.getElementById("cf").value;
+  filter.projects=null;
+  render();
+}
 function portfolio(el){
-el.innerHTML=`
-<div class="filters">
-<select id="sf" onchange="updatePortfolio()">
-<option>All Statuses</option><option>On Track</option><option>At Risk</option><option>Delayed</option>
-</select>
-<select id="cf" onchange="updatePortfolio()">
-<option>All Categories</option><option>Digital</option><option>Finance</option><option>Operations</option><option>Research</option>
-</select>
-</div>
-<div id="portfolioBody"></div>`;
-updatePortfolio();
+  const d=filteredProjects();
+  const average=d.length?sum(d,"progress")/d.length:0;
+  const overrun=d.reduce((s,p)=>s+Math.max(0,p.actual-p.budget),0);
+  el.innerHTML=`
+    <div class="filters">
+      <select id="sf" onchange="changePortfolioFilters()">
+        ${["All Statuses","On Track","At Risk","Delayed"].map(s=>`<option ${s===projectStatus?"selected":""}>${s}</option>`).join("")}
+      </select>
+      <select id="cf" onchange="changePortfolioFilters()">
+        ${["All Categories","Digital","Finance","Operations","Research"].map(s=>`<option ${s===projectCategory?"selected":""}>${s}</option>`).join("")}
+      </select>
+    </div>
+    ${filterBar("projects")}
+    <div class="cards">
+      ${card("Total Projects",d.length)}
+      ${card("On Track",d.filter(p=>p.status==="On Track").length)}
+      ${card("At Risk / Delayed",d.filter(p=>p.status!=="On Track").length)}
+      ${card("Overdue Milestones",sum(d,"overdue"))}
+    </div>
+    <div class="cards">
+      ${card("Approved Budget",money(sum(d,"budget")))}
+      ${card("Actual Spend",money(sum(d,"actual")))}
+      ${card("Budget Overrun Exposure",dollars(overrun))}
+      ${card("Average Progress",pct(average))}
+    </div>
+    <div class="grid2">
+      ${panel("Project Health Distribution",canvas("pr1"))}
+      ${panel("Budget vs Actual by Project",canvas("pr2"))}
+      ${panel("Project Delivery Progress",canvas("pr3"))}
+      ${panel("Risk & Milestone Exposure",canvas("pr4"))}
+    </div>
+    ${panel("Project Timeline — Planned Delivery Windows",gantt(d))}
+<div class="notice">💡 Click on a project name to view its detailed information, including project scope, financials, team members, and the 10-phase milestone tracker.</div>
+    ${panel("Portfolio Register — Click a Project",`
+      <div class="tablewrap"><table>
+        <thead><tr><th>Project</th><th>Status</th><th>Budget</th><th>Actual</th><th>Progress</th><th>Overdue</th></tr></thead>
+        <tbody>${d.map(p=>`<tr class="clickable" onclick="openProject('${p.id}')"><td>${p.name} ↗</td><td>${statusBadge(p.status)}</td><td>${money(p.budget)}</td><td>${money(p.actual)}</td><td>${p.progress}%</td><td>${p.overdue}</td></tr>`).join("")}</tbody>
+      </table></div>
+    `)}
+    <div class="notice">Click any project in the register to view its scope, financials, project team and 10-phase delivery tracker.</div>`;
+  const statuses=["On Track","At Risk","Delayed"];
+  plot("pr1","doughnut",statuses,[{data:statuses.map(s=>d.filter(p=>p.status===s).length),backgroundColor:[colors.teal,colors.amber,colors.red]}]);
+  plot("pr2","bar",d.map(p=>p.name),[
+    {label:"Budget",data:d.map(p=>p.budget),backgroundColor:colors.blue},
+    {label:"Actual",data:d.map(p=>p.actual),backgroundColor:colors.teal}
+  ]);
+  plot("pr3","bar",d.map(p=>p.name),[{label:"Completion %",data:d.map(p=>p.progress),backgroundColor:d.map(p=>p.status==="Delayed"?colors.red:p.status==="At Risk"?colors.amber:colors.teal)}],{
+    indexAxis:"y",plugins:{datalabels:{formatter:v=>v+"%",anchor:"end",align:"end"}}
+  });
+plot("pr4","scatter",[],[{
+  label:"Projects",
+  data:d.map(p=>({x:p.risk,y:p.overdue})),
+  backgroundColor:colors.red,
+  pointRadius:7,
+  pointHoverRadius:10
+}],{
+  layout:{
+    padding:{top:35,right:35,bottom:15,left:15}
+  },
+  plugins:{
+    tooltip:{
+      callbacks:{
+        label:function(context){
+          const p=d[context.dataIndex];
+          return p.name+" | Risk: "+p.risk+
+                 " | Overdue: "+p.overdue;
+        }
+      }
+    },
+    datalabels:{
+      display:false
+    }
+  },
+  scales:{
+    x:{
+      min:0,
+      max:6,
+      title:{
+        display:true,
+        text:"Risk Score",
+        color:"#aabdd2"
+      },
+      ticks:{color:"#aabdd2"}
+    },
+    y:{
+      min:0,
+      max:6,
+      title:{
+        display:true,
+        text:"Overdue Milestones",
+        color:"#aabdd2"
+      },
+      ticks:{color:"#aabdd2"}
+    }
+  }
+});
 }
-
-function updatePortfolio(){
-charts.forEach(c=>c.destroy());charts=[];
-const sf=document.getElementById("sf").value;
-const cf=document.getElementById("cf").value;
-const d=projects.filter(p=>(sf==="All Statuses"||p.status===sf)&&(cf==="All Categories"||p.category===cf));
-const exposure=d.reduce((s,p)=>s+Math.max(0,p.actual-p.budget),0);
-const average=d.length?total(d,"progress")/d.length:0;
-document.getElementById("portfolioBody").innerHTML=`
-<div class="cards">
-${kpi("Total Projects",d.length)}
-${kpi("On Track",d.filter(p=>p.status==="On Track").length)}
-${kpi("At Risk / Delayed",d.filter(p=>p.status!=="On Track").length)}
-${kpi("Overdue Milestones",total(d,"overdue"))}
-</div>
-<div class="cards">
-${kpi("Approved Budget",money(total(d,"budget")))}
-${kpi("Actual Spend",money(total(d,"actual")))}
-${kpi("Budget Overrun Exposure",dollars(exposure))}
-${kpi("Average Progress",pct(average))}
-</div>
-<div class="grid2">
-${panel("Project Health Distribution",cv("pr1"))}
-${panel("Budget vs Actual by Project",cv("pr2"))}
-</div>
-<div class="grid2">
-${panel("Project Delivery Progress",cv("pr3"))}
-${panel("Risk & Milestone Exposure",cv("pr4"))}
-</div>
-${panel("Project Timeline — Planned Delivery Windows",gantt(d))}
-${panel("Portfolio Register — Click to View Project Details",`
-<div class="tablewrap"><table>
-<thead><tr><th>Project</th><th>Status</th><th>Budget</th><th>Actual</th><th>Progress</th><th>Overdue</th></tr></thead>
-<tbody>${d.map(p=>`<tr class="clickable" onclick="openProject('${p.id}')">
-<td>${p.name} ↗</td><td>${badge(p.status)}</td>
-<td>${money(p.budget)}</td><td>${money(p.actual)}</td>
-<td>${p.progress}%</td><td>${p.overdue}</td></tr>`).join("")}</tbody></table></div>`)}
-<div class="notice">Click any project in the register to view project scope, team, financials and the 10-phase milestone tracker.</div>`;
-plot("pr1","doughnut",["On Track","At Risk","Delayed"],[{data:["On Track","At Risk","Delayed"].map(s=>d.filter(p=>p.status===s).length),backgroundColor:[color.teal,color.amber,color.red]}]);
-plot("pr2","bar",d.map(p=>p.name),[
-{label:"Budget",data:d.map(p=>p.budget),backgroundColor:color.blue},
-{label:"Actual",data:d.map(p=>p.actual),backgroundColor:color.teal}
-]);
-plot("pr3","bar",d.map(p=>p.name),[
-{label:"Completion %",data:d.map(p=>p.progress),backgroundColor:d.map(p=>p.status==="Delayed"?color.red:p.status==="At Risk"?color.amber:color.teal)}
-],{indexAxis:"y"});
-plot("pr4","scatter",[],[
-{label:"Projects",data:d.map(p=>({x:p.risk,y:p.overdue})),backgroundColor:color.red,pointRadius:8}
-],{scales:{
-x:{min:0,max:6,title:{display:true,text:"Risk Score",color:"#aabdd2"},ticks:{color:"#aabdd2"}},
-y:{min:0,title:{display:true,text:"Overdue Milestones",color:"#aabdd2"},ticks:{color:"#aabdd2"}}
-}});
-}
-
 function gantt(d){
-const names=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const head=`<div class="name">Project</div>${names.map(m=>`<div>${m}</div>`).join("")}`;
-const rows=d.map(p=>{
-const start=new Date(p.start+"T00:00:00"),end=new Date(p.end+"T00:00:00");
-const cells=names.map((m,i)=>{
-const first=new Date(2026,i,1),last=new Date(2026,i+1,0);
-const active=start<=last&&end>=first;
-const cls=active?(p.status==="Delayed"?"late":p.status==="At Risk"?"risk":"filled"):"";
-return `<div class="${cls}">${active?"●":""}</div>`;
-}).join("");
-return `<div class="name clickable" onclick="openProject('${p.id}')">${p.name}</div>${cells}`;
-}).join("");
-return `<div class="tablewrap"><div class="gantt">${head}${rows}</div></div>
-<p class="muted">2026 monthly view. Projects extending into 2027 continue beyond this timeline.</p>`;
+  const names=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return `<div class="tablewrap"><div class="gantt">
+    <div class="name">Project</div>${names.map(m=>`<div>${m}</div>`).join("")}
+    ${d.map(p=>{
+      const start=new Date(p.start+"T00:00:00"),end=new Date(p.end+"T00:00:00");
+      return `<div class="name clickable" onclick="openProject('${p.id}')">${p.name}</div>`+
+        names.map((m,i)=>{
+          const active=start<=new Date(2026,i+1,0)&&end>=new Date(2026,i,1);
+          const cls=active?(p.status==="Delayed"?"late":p.status==="At Risk"?"risk":"filled"):"";
+          return `<div class="${cls}">${active?"●":""}</div>`;
+        }).join("");
+    }).join("")}
+  </div></div><p class="muted">2026 monthly view. Projects extending into 2027 continue beyond this timeline.</p>`;
 }
 
+/* PROJECT DETAIL */
 function openProject(id){
-selected=projects.find(p=>p.id===id);
-page="detail";
-document.getElementById("title").textContent=selected.name+" | Project Detail";
-render();
-window.scrollTo(0,0);
+  selected=projects.find(p=>p.id===id);
+  if(!selected)return;
+  page="detail";
+  document.getElementById("title").textContent=selected.name+" | Project Detail";
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page==="projects"));
+  render();
+  window.scrollTo(0,0);
 }
-
 function detail(el){
-const p=selected;if(!p)return;
-const complete=p.progress===100;
-const phaseActive=complete?10:Math.min(9,Math.floor(p.progress/10));
-const remaining=p.budget-p.actual;
-el.innerHTML=`
-<button class="btn" onclick="go('projects',document.querySelectorAll('nav button')[1])">← Back to Project Portfolio</button>
-<div class="notice"><strong>FY2026 &nbsp; | &nbsp; ${p.category} &nbsp; | &nbsp; Digital Transformation</strong><br>
-Project ID: ${p.id} · ${p.scope}</div>
-<div class="cards">
-${kpi("Project Completion",p.progress+"%")}
-${kpi("Project Status",p.status)}
-${kpi("Project Value",money(p.budget))}
-${kpi("Planned End",p.end)}
-</div>
-<div class="grid2">
-<div>
-${panel("Project Scope",`<p class="scope">${p.scope}</p><p class="muted">Project start: ${p.start}<br>Planned completion: ${p.end}</p>`)}
-<div class="grid2">
-${panel("Countries in Scope",`<div class="scope">${p.countries.map(c=>"🌐 "+c).join("<br>")}</div>`)}
-${panel("Project Financials",`<p class="scope">Approved Budget: ${money(p.budget)}<br>Actual Spend: ${money(p.actual)}<br>Remaining Budget: ${dollars(remaining)}<br>Overdue Milestones: ${p.overdue}</p>`)}
-</div>
-${panel("Project Team",`<div class="team">
-${[["PM",p.owner,"Project Manager"],["BP","Jordan Lee","Business PIC"],["SP","Taylor Ng","Solutions PIC"],["IT","Morgan Tan","ITBP PIC"]].map(m=>`
-<div class="member"><div class="avatar">${m[0]}</div>
-<strong style="font-size:12px">${m[1]}</strong><small>${m[2]}</small></div>`).join("")}
-</div>`)}
-${panel("Key Issues and Highlights",`
-<p class="scope">${p.status==="On Track"?
-"Delivery is progressing within the current project health classification.":
-"Management attention is required due to delivery risks or schedule variance."}</p>
-<p class="scope">Risk score: ${p.risk}/5 · Overdue milestones: ${p.overdue}</p>
-<p class="muted">Synthetic case-study commentary. Replace with approved, anonymised project narratives before publishing.</p>`)}
-${panel("Project Completion",`<div class="progress"><span style="width:${p.progress}%"></span></div><p class="muted">${p.progress}% complete</p>`)}
-</div>
-<div>
-${panel("Milestones — 10 Delivery Phases",`
-<p class="muted">Overall progress: ${p.progress}% · Illustrative phase mapping</p>
-<div class="progress"><span style="width:${p.progress}%"></span></div>
-<div class="timeline" style="margin-top:25px">
-${phases.map((ph,i)=>{
-const done=complete||i<phaseActive;
-const active=!complete&&i===phaseActive;
-return `<div class="phase ${done?"":active?"active":"pending"}">
-<strong>${ph[0]}</strong>
-<span class="status ${done?"good":active?"warn":"bad"}" style="float:right">${done?"Completed":active?"In Progress":"Pending"}</span>
-<p>${ph[1]}</p></div>`;
-}).join("")}
-</div>`)}
-</div>
-</div>
-<div class="notice">Milestone phase statuses are illustrative estimates derived from overall completion percentage, not actual milestone records.</div>`;
+  if(!selected)return;
+  const p=selected;
+  const active=p.progress===100?10:Math.min(9,Math.floor(p.progress/10));
+  el.innerHTML=`
+    <button class="btn" onclick="go('projects')">← Back to Project Portfolio</button>
+    <div class="notice"><strong>${p.category} | Project ${p.id}</strong><br>${p.scope}</div>
+    <div class="cards">
+      ${card("Project Completion",p.progress+"%")}
+      ${card("Project Status",p.status)}
+      ${card("Project Value",money(p.budget))}
+      ${card("Planned End",p.end)}
+    </div>
+    <div class="grid2">
+      <div>
+        ${panel("Project Scope",`<p class="scope">${p.scope}</p><p class="muted">Start: ${p.start}<br>End: ${p.end}</p>`)}
+        ${panel("Countries in Scope",`<p class="scope">${p.countries.join("<br>")}</p>`)}
+        ${panel("Project Financials",`<p class="scope">Approved Budget: ${dollars(p.budget)}<br>Actual Spend: ${dollars(p.actual)}<br>Remaining Budget: ${dollars(p.budget-p.actual)}<br>Overdue Milestones: ${p.overdue}</p>`)}
+        ${panel("Project Team",`<div class="team">${[
+          ["PM",p.owner,"Project Manager"],
+          ["BP","Jordan Lee","Business PIC"],
+          ["SP","Taylor Ng","Solutions PIC"],
+          ["IT","Morgan Tan","ITBP PIC"]
+        ].map(m=>`<div class="member"><div class="avatar">${m[0]}</div><strong>${m[1]}</strong><small>${m[2]}</small></div>`).join("")}</div>`)}
+        ${panel("Project Completion",`<div class="progress"><span style="width:${p.progress}%"></span></div><p class="muted">${p.progress}% complete</p>`)}
+        ${panel("Key Issues & Highlights",`<p class="scope">Status: ${p.status}<br>Risk Score: ${p.risk}/5<br>Overdue Milestones: ${p.overdue}</p><p class="muted">Illustrative project commentary.</p>`)}
+      </div>
+      <div>
+        ${panel("Milestones — 10 Delivery Phases",`
+          <div class="progress"><span style="width:${p.progress}%"></span></div>
+          <div class="timeline" style="margin-top:25px">
+            ${phases.map((ph,i)=>{
+              const done=p.progress===100||i<active;
+              const current=p.progress<100&&i===active;
+              return `<div class="phase ${done?"":current?"active":"pending"}">
+                <strong>${ph[0]}</strong>
+                <span class="status ${done?"good":current?"warn":"bad"}" style="float:right">${done?"Completed":current?"In Progress":"Pending"}</span>
+                <p>${ph[1]}</p>
+              </div>`;
+            }).join("")}
+          </div>
+        `)}
+      </div>
+    </div>
+    <div class="notice">Milestone statuses are illustrative estimates derived from overall completion percentage, not actual milestone records.</div>`;
 }
 
+/* FINANCIAL REPORT */
+function financialTable(rows){
+  return `<div class="tablewrap"><table>
+    <thead><tr><th>Measure</th><th>Formula / Definition</th><th>Result</th><th>Interpretation</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr><td><strong>${r[0]}</strong></td><td class="formula">${r[1]}</td><td class="measure-value">${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody>
+  </table></div>`;
+}
 function pnl(el){
-const r=revenue.reduce((a,b)=>a+b,0)*1000;
-const c=costs.reduce((a,b)=>a+b,0)*1000;
-const b=revBudget.reduce((a,b)=>a+b,0)*1000;
-const profit=r-c,variance=r-b,margin=profit/r*100,costRatio=c/r*100;
-const measures=[
-["Total Revenue","SUM(Actual Revenue)",dollars(r),"Total income generated during the reporting period."],
-["Operating Costs","SUM(Operating Costs)",dollars(c),"Operating expenditure incurred."],
-["Operating Profit","Revenue - Operating Costs",dollars(profit),"Profit before financing and tax."],
-["Operating Margin","Operating Profit / Revenue",pct(margin),"Profitability and operational efficiency."],
-["Cost-to-Income Ratio","Operating Costs / Revenue",pct(costRatio),"Proportion of revenue consumed by operating costs."],
-["Revenue Budget","SUM(Budget Revenue)",dollars(b),"Approved revenue target."],
-["Revenue Variance","Actual Revenue - Budget Revenue",signedMoney(variance),"Positive variance indicates revenue above budget."],
-["Revenue Variance %","Revenue Variance / Budget Revenue",pct(variance/b*100),"Percentage performance against revenue budget."]
-];
-el.innerHTML=`
-<div class="section-label">Financial Performance · Jan–Oct 2026</div>
-<div class="cards">
-${kpi("Total Revenue",money(r))}
-${kpi("Operating Costs",money(c))}
-${kpi("Operating Profit",money(profit))}
-${kpi("Operating Margin",pct(margin))}
-</div>
-<div class="cards">
-${kpi("Revenue Budget",money(b))}
-${kpi("Revenue Variance",signedMoney(variance))}
-${kpi("Revenue Variance %",pct(variance/b*100))}
-${kpi("Cost-to-Income Ratio",pct(costRatio))}
-</div>
-<div class="grid2">
-${panel("Revenue & Operating Profit Trend",cv("pl1"))}
-${panel("Actual Revenue vs Budget",cv("pl2"))}
-${panel("Monthly Operating Margin",cv("pl3"))}
-${panel("Monthly Revenue Variance",cv("pl4"))}
-</div>
-${panel("Financial Measures & KPI Definitions",measureTable(measures))}
-${panel("Monthly Financial Performance",`
-<div class="tablewrap"><table>
-<thead><tr><th>Month</th><th>Revenue</th><th>Budget</th><th>Variance</th><th>Variance %</th><th>Operating Costs</th><th>Operating Profit</th><th>Margin</th></tr></thead>
-<tbody>${months.map((m,i)=>{
-const v=(revenue[i]-revBudget[i])*1000;
-return `<tr><td>${m}</td><td>${dollars(revenue[i]*1000)}</td>
-<td>${dollars(revBudget[i]*1000)}</td><td>${signedMoney(v)}</td>
-<td>${pct((revenue[i]-revBudget[i])/revBudget[i]*100)}</td>
-<td>${dollars(costs[i]*1000)}</td><td>${dollars((revenue[i]-costs[i])*1000)}</td>
-<td>${pct((revenue[i]-costs[i])/revenue[i]*100)}</td></tr>`;
-}).join("")}</tbody></table></div>`)}
-${panel("Management Insights",insights([
-"Revenue is "+signedMoney(variance)+" against the approved revenue budget.",
-"Operating margin is "+pct(margin)+", indicating the proportion of revenue retained as operating profit.",
-"Cost-to-income ratio is "+pct(costRatio)+", highlighting operating cost efficiency.",
-"Review monthly cost movements and revenue variances to identify improvement opportunities."
-]))}
-<div class="notice">Synthetic FY2026 management P&L, January to October. Operating profit excludes financing and tax. Revenue growth and forecast measures require additional historical and forecast datasets.</div>`;
-plot("pl1","line",months,[
-{label:"Revenue (S$000)",data:revenue,borderColor:color.blue,tension:.3},
-{label:"Operating Profit (S$000)",data:revenue.map((v,i)=>v-costs[i]),borderColor:color.teal,tension:.3}
-]);
-plot("pl2","bar",months,[
-{label:"Actual",data:revenue,backgroundColor:color.teal},
-{label:"Budget",data:revBudget,backgroundColor:color.blue}
-]);
-plot("pl3","line",months,[
-{label:"Operating Margin %",data:revenue.map((v,i)=>(v-costs[i])/v*100),borderColor:color.amber,tension:.3,fill:true,backgroundColor:"rgba(233,162,59,.12)"}
-]);
-plot("pl4","bar",months,[
-{label:"Revenue Variance (S$000)",data:revenue.map((v,i)=>v-revBudget[i]),backgroundColor:revenue.map((v,i)=>v>=revBudget[i]?color.teal:color.red)}
-]);
+  const indices=months.map((m,i)=>i).filter(i=>!filter.pnl.length||filter.pnl.includes(months[i]));
+  const r=indices.reduce((s,i)=>s+revenue[i],0)*1000;
+  const c=indices.reduce((s,i)=>s+costs[i],0)*1000;
+  const b=indices.reduce((s,i)=>s+revBudget[i],0)*1000;
+  const profit=r-c,variance=r-b,margin=r?profit/r*100:0,ratio=r?c/r*100:0;
+  const measures=[
+    ["Total Revenue","SUM(Actual Revenue)",dollars(r),"Income for selected months"],
+    ["Operating Costs","SUM(Operating Costs)",dollars(c),"Operating expenditure"],
+    ["Operating Profit","Revenue - Costs",dollars(profit),"Before financing and tax"],
+    ["Operating Margin","Profit / Revenue",pct(margin),"Profitability"],
+    ["Cost-to-Income Ratio","Costs / Revenue",pct(ratio),"Operating efficiency"],
+    ["Revenue Budget","SUM(Budget Revenue)",dollars(b),"Approved target"],
+    ["Revenue Variance","Actual - Budget",signed(variance),"Positive is above budget"],
+    ["Revenue Variance %","Variance / Budget",pct(b?variance/b*100:0),"Performance against budget"]
+  ];
+  el.innerHTML=`
+    <div class="section-label">Financial Performance · Jan–Oct 2026</div>
+    ${filterBar("pnl")}
+    <div class="notice">Click a month in any chart to filter. Click more months to compare. Click a selected month again to remove it.</div>
+    <div class="cards">
+      ${card("Total Revenue",money(r))}
+      ${card("Operating Costs",money(c))}
+      ${card("Operating Profit",money(profit))}
+      ${card("Operating Margin",pct(margin))}
+    </div>
+    <div class="cards">
+      ${card("Revenue Budget",money(b))}
+      ${card("Revenue Variance",signed(variance))}
+      ${card("Revenue Variance %",pct(b?variance/b*100:0))}
+      ${card("Cost-to-Income Ratio",pct(ratio))}
+    </div>
+    <div class="grid2">
+      ${panel("Revenue & Operating Profit Trend",canvas("pl1"))}
+      ${panel("Actual Revenue vs Budget",canvas("pl2"))}
+      ${panel("Monthly Operating Margin",canvas("pl3"))}
+      ${panel("Monthly Revenue Variance",canvas("pl4"))}
+    </div>
+    ${panel("Financial Measures & KPI Definitions",financialTable(measures))}
+    ${panel("Monthly Financial Performance",`
+      <div class="tablewrap"><table>
+        <thead><tr><th>Month</th><th>Revenue</th><th>Budget</th><th>Variance</th><th>Variance %</th><th>Costs</th><th>Profit</th><th>Margin</th></tr></thead>
+        <tbody>${indices.map(i=>`<tr>
+          <td>${months[i]}</td>
+          <td>${dollars(revenue[i]*1000)}</td>
+          <td>${dollars(revBudget[i]*1000)}</td>
+          <td>${signed((revenue[i]-revBudget[i])*1000)}</td>
+          <td>${pct((revenue[i]-revBudget[i])/revBudget[i]*100)}</td>
+          <td>${dollars(costs[i]*1000)}</td>
+          <td>${dollars((revenue[i]-costs[i])*1000)}</td>
+          <td>${pct((revenue[i]-costs[i])/revenue[i]*100)}</td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    `)}
+    ${panel("Management Insights",insights([
+      "Selected months: "+indices.map(i=>months[i]).join(", "),
+      "Revenue variance: "+signed(variance),
+      "Operating margin: "+pct(margin),
+      "Cost-to-income ratio: "+pct(ratio)
+    ]))}
+    <div class="notice">Synthetic P&L. Charts use S$000. Tables use SGD. Operating profit excludes financing and tax.</div>`;
+  const highlight=i=>!filter.pnl.length||filter.pnl.includes(months[i]);
+  plot("pl1","line",months,[
+    {label:"Revenue (S$000)",data:revenue,borderColor:colors.blue,tension:.3,pointRadius:months.map((m,i)=>highlight(i)?5:2)},
+    {label:"Operating Profit (S$000)",data:revenue.map((v,i)=>v-costs[i]),borderColor:colors.teal,tension:.3}
+  ]);
+  plot("pl2","bar",months,[
+    {label:"Actual",data:revenue,backgroundColor:months.map((m,i)=>highlight(i)?colors.teal:"#344b60")},
+    {label:"Budget",data:revBudget,backgroundColor:colors.blue}
+  ]);
+  plot("pl3","line",months,[{label:"Operating Margin %",data:revenue.map((v,i)=>(v-costs[i])/v*100),borderColor:colors.amber,tension:.3,fill:true,backgroundColor:"rgba(233,162,59,.12)"}]);
+  plot("pl4","bar",months,[{label:"Revenue Variance (S$000)",data:revenue.map((v,i)=>v-revBudget[i]),backgroundColor:revenue.map((v,i)=>v>=revBudget[i]?colors.teal:colors.red)}]);
 }
 
+/* FUNDING & GRANTS */
 function funding(el){
-const a=total(grants,"approved"),c=total(grants,"committed"),d=total(grants,"disbursed");
-const measures=[
-["Approved Funding","SUM(Approved Amount)",dollars(a),"Total authorised funding allocation."],
-["Committed Funding","SUM(Committed Amount)",dollars(c),"Funding committed to approved activities."],
-["Disbursed Funding","SUM(Disbursed Amount)",dollars(d),"Funding paid out to recipients."],
-["Commitment Rate","Committed / Approved",pct(c/a*100),"Share of approved funding committed."],
-["Disbursement Rate","Disbursed / Approved",pct(d/a*100),"Share of approved funding paid out."],
-["Uncommitted Funding","Approved - Committed",dollars(a-c),"Approved funds not yet committed."],
-["Undisbursed Commitments","Committed - Disbursed",dollars(c-d),"Committed funds awaiting disbursement."],
-["Remaining Undisbursed Funding","Approved - Disbursed",dollars(a-d),"Approved funding not yet paid out."]
-];
-el.innerHTML=`
-<div class="section-label">Funding Governance · Synthetic Programme Portfolio</div>
-<div class="cards">
-${kpi("Approved Funding",money(a))}
-${kpi("Committed Funding",money(c))}
-${kpi("Disbursed Funding",money(d))}
-${kpi("Disbursement Rate",pct(d/a*100))}
-</div>
-<div class="cards">
-${kpi("Commitment Rate",pct(c/a*100))}
-${kpi("Uncommitted Funding",money(a-c))}
-${kpi("Undisbursed Commitments",money(c-d))}
-${kpi("Remaining Undisbursed",money(a-d))}
-</div>
-<div class="grid2">
-${panel("Funding Allocation by Programme",cv("f1"))}
-${panel("Approved vs Committed vs Disbursed",cv("f2"))}
-${panel("Funding Balance Analysis",cv("f3"))}
-${panel("Disbursement Rate by Programme",cv("f4"))}
-</div>
-${panel("Funding Measures & KPI Definitions",measureTable(measures))}
-${panel("Funding Programme Register",`
-<div class="tablewrap"><table>
-<thead><tr><th>Programme</th><th>Approved</th><th>Committed</th><th>Disbursed</th><th>Commitment %</th><th>Disbursement %</th><th>Uncommitted</th></tr></thead>
-<tbody>${grants.map(g=>`<tr>
-<td>${g.name}</td><td>${dollars(g.approved)}</td><td>${dollars(g.committed)}</td>
-<td>${dollars(g.disbursed)}</td><td>${pct(g.committed/g.approved*100)}</td>
-<td>${pct(g.disbursed/g.approved*100)}</td><td>${dollars(g.approved-g.committed)}</td>
-</tr>`).join("")}</tbody></table></div>`)}
-${panel("Management Insights",insights([
-pct(c/a*100)+" of approved funding has been committed.",
-pct(d/a*100)+" of approved funding has been disbursed.",
-dollars(c-d)+" of committed funding remains undisbursed.",
-dollars(a-c)+" of approved funding remains uncommitted.",
-"Review programme-level disbursement gaps and investigate delayed payment milestones."
-]))}
-<div class="notice">Approved, committed and disbursed amounts are cumulative funding stages and must not be added together. The balance chart divides approved funding into mutually exclusive categories. Funding utilisation based on eligible expenditure and approval lead times require additional transaction-level records.</div>`;
-plot("f1","doughnut",grants.map(g=>g.name),[
-{data:grants.map(g=>g.approved),backgroundColor:[color.teal,color.blue,color.amber,color.purple,color.red]}
-]);
-plot("f2","bar",grants.map(g=>g.name),[
-{label:"Approved",data:grants.map(g=>g.approved),backgroundColor:color.blue},
-{label:"Committed",data:grants.map(g=>g.committed),backgroundColor:color.amber},
-{label:"Disbursed",data:grants.map(g=>g.disbursed),backgroundColor:color.teal}
-],{indexAxis:"y"});
-plot("f3","doughnut",["Disbursed","Committed but Undisbursed","Uncommitted"],[
-{data:[d,c-d,a-c],backgroundColor:[color.teal,color.amber,color.blue]}
-]);
-plot("f4","bar",grants.map(g=>g.name),[
-{label:"Disbursement %",data:grants.map(g=>g.disbursed/g.approved*100),backgroundColor:color.teal}
-],{indexAxis:"y"});
+  const dset=filter.funding===null?grants:grants.filter(g=>g.name===filter.funding);
+  const a=sum(dset,"approved"),c=sum(dset,"committed"),d=sum(dset,"disbursed");
+  el.innerHTML=`
+    <div class="section-label">Funding Governance · Synthetic Programme Portfolio</div>
+    ${filterBar("funding")}
+    <div class="cards">
+      ${card("Approved Funding",money(a))}
+      ${card("Committed Funding",money(c))}
+      ${card("Disbursed Funding",money(d))}
+      ${card("Disbursement Rate",pct(a?d/a*100:0))}
+    </div>
+    <div class="cards">
+      ${card("Commitment Rate",pct(a?c/a*100:0))}
+      ${card("Uncommitted Funding",money(a-c))}
+      ${card("Undisbursed Commitments",money(c-d))}
+      ${card("Remaining Undisbursed",money(a-d))}
+    </div>
+    <div class="grid2">
+      ${panel("Funding Allocation by Programme",canvas("f1"))}
+      ${panel("Approved vs Committed vs Disbursed",canvas("f2"))}
+      ${panel("Funding Balance Analysis",canvas("f3"))}
+      ${panel("Disbursement Rate by Programme",canvas("f4"))}
+    </div>
+    ${panel("Funding Measures & KPI Definitions",financialTable([
+      ["Approved Funding","SUM(Approved)",dollars(a),"Authorised funding"],
+      ["Committed Funding","SUM(Committed)",dollars(c),"Committed funding"],
+      ["Disbursed Funding","SUM(Disbursed)",dollars(d),"Paid funding"],
+      ["Commitment Rate","Committed / Approved",pct(a?c/a*100:0),"Share committed"],
+      ["Disbursement Rate","Disbursed / Approved",pct(a?d/a*100:0),"Share disbursed"],
+      ["Uncommitted","Approved - Committed",dollars(a-c),"Not committed"],
+      ["Undisbursed Commitments","Committed - Disbursed",dollars(c-d),"Awaiting payment"],
+      ["Remaining Undisbursed","Approved - Disbursed",dollars(a-d),"Not yet paid"]
+    ]))}
+    ${panel("Funding Programme Register",`
+      <div class="tablewrap"><table>
+        <thead><tr><th>Programme</th><th>Approved</th><th>Committed</th><th>Disbursed</th><th>Commitment %</th><th>Disbursement %</th><th>Uncommitted</th></tr></thead>
+        <tbody>${dset.map(g=>`<tr><td>${g.name}</td><td>${dollars(g.approved)}</td><td>${dollars(g.committed)}</td><td>${dollars(g.disbursed)}</td><td>${pct(g.committed/g.approved*100)}</td><td>${pct(g.disbursed/g.approved*100)}</td><td>${dollars(g.approved-g.committed)}</td></tr>`).join("")}</tbody>
+      </table></div>
+    `)}
+    ${panel("Management Insights",insights([
+      pct(a?c/a*100:0)+" of funding is committed.",
+      pct(a?d/a*100:0)+" of funding is disbursed.",
+      dollars(c-d)+" of commitments remain undisbursed.",
+      dollars(a-c)+" remains uncommitted."
+    ]))}
+    <div class="notice">Funding stages are cumulative and must not be added together. All data are synthetic.</div>`;
+  plot("f1","doughnut",dset.map(g=>g.name),[{data:dset.map(g=>g.approved),backgroundColor:[colors.teal,colors.blue,colors.amber,colors.purple,colors.red]}]);
+  plot("f2","bar",dset.map(g=>g.name),[
+    {label:"Approved",data:dset.map(g=>g.approved),backgroundColor:colors.blue},
+    {label:"Committed",data:dset.map(g=>g.committed),backgroundColor:colors.amber},
+    {label:"Disbursed",data:dset.map(g=>g.disbursed),backgroundColor:colors.teal}
+  ],{indexAxis:"y"});
+  plot("f3","doughnut",["Disbursed","Committed but Undisbursed","Uncommitted"],[{data:[d,c-d,a-c],backgroundColor:[colors.teal,colors.amber,colors.blue]}]);
+  plot("f4","bar",dset.map(g=>g.name),[{label:"Disbursement %",data:dset.map(g=>g.disbursed/g.approved*100),backgroundColor:colors.teal}],{
+    indexAxis:"y",plugins:{datalabels:{formatter:v=>pct(v),anchor:"end",align:"end"}}
+  });
 }
 
+/* AUTOMATION IMPACT */
 function automation(el){
-const runs=total(workflows,"runs"),hours=total(workflows,"hours");
-const rate=workflows.reduce((s,w)=>s+w.runs*w.success/100,0)/runs;
-el.innerHTML=`
-<div class="cards">
-${kpi("Transactions",runs.toLocaleString())}
-${kpi("Weighted Success Rate",pct(rate))}
-${kpi("Hours Saved",hours.toLocaleString())}
-${kpi("Estimated Cost Avoidance",dollars(hours*45))}
-</div>
-<div class="grid2">
-${panel("Workflow Transactions",cv("a1"))}
-${panel("Hours Saved by Workflow",cv("a2"))}
-</div>
-${panel("Automation Workflow Register",`
-<div class="tablewrap"><table>
-<thead><tr><th>Workflow</th><th>Transactions</th><th>Success Rate</th><th>Hours Saved</th><th>Estimated Cost Avoidance</th></tr></thead>
-<tbody>${workflows.map(w=>`<tr><td>${w.name}</td><td>${w.runs.toLocaleString()}</td><td>${pct(w.success)}</td><td>${w.hours}</td><td>${dollars(w.hours*45)}</td></tr>`).join("")}</tbody></table></div>`)}
-<div class="notice">Estimated cost avoidance assumes S$45 per manual hour saved. Figures are illustrative and are not verified realised savings.</div>`;
-plot("a1","bar",workflows.map(w=>w.name),[
-{label:"Transactions",data:workflows.map(w=>w.runs),backgroundColor:color.blue}
-]);
-plot("a2","bar",workflows.map(w=>w.name),[
-{label:"Hours Saved",data:workflows.map(w=>w.hours),backgroundColor:color.teal}
-],{indexAxis:"y"});
+  const dset=filter.automation===null?workflows:workflows.filter(w=>w.name===filter.automation);
+  const runs=sum(dset,"runs"),hours=sum(dset,"hours");
+  const rate=runs?dset.reduce((s,w)=>s+w.runs*w.success/100,0)/runs:0;
+  el.innerHTML=`
+    ${filterBar("automation")}
+    <div class="cards">
+      ${card("Transactions",number(runs))}
+      ${card("Weighted Success Rate",pct(rate))}
+      ${card("Hours Saved",number(hours))}
+      ${card("Estimated Cost Avoidance",dollars(hours*45))}
+    </div>
+    <div class="grid2">
+      ${panel("Workflow Transactions",canvas("a1"))}
+      ${panel("Hours Saved by Workflow",canvas("a2"))}
+    </div>
+    ${panel("Automation Workflow Register",`
+      <div class="tablewrap"><table>
+        <thead><tr><th>Workflow</th><th>Transactions</th><th>Success Rate</th><th>Hours Saved</th><th>Estimated Cost Avoidance</th></tr></thead>
+        <tbody>${dset.map(w=>`<tr><td>${w.name}</td><td>${number(w.runs)}</td><td>${pct(w.success)}</td><td>${number(w.hours)}</td><td>${dollars(w.hours*45)}</td></tr>`).join("")}</tbody>
+      </table></div>
+    `)}
+    <div class="notice">Estimated cost avoidance assumes S$45 per manual hour saved. These are illustrative, not verified realised savings.</div>`;
+  plot("a1","bar",dset.map(w=>w.name),[{label:"Transactions",data:dset.map(w=>w.runs),backgroundColor:colors.blue}]);
+  plot("a2","bar",dset.map(w=>w.name),[{label:"Hours Saved",data:dset.map(w=>w.hours),backgroundColor:colors.teal}],{
+    indexAxis:"y",plugins:{datalabels:{formatter:v=>number(v),anchor:"end",align:"end"}}
+  });
 }
 
+/* EXECUTIVE SCORECARD */
 function executive(el){
-const r=revenue.reduce((a,b)=>a+b,0),c=costs.reduce((a,b)=>a+b,0);
-const d=total(grants,"disbursed"),a=total(grants,"approved");
-const runs=total(workflows,"runs");
-const success=workflows.reduce((s,w)=>s+w.runs*w.success/100,0)/runs;
-const onTrack=projects.filter(p=>p.status==="On Track").length;
-el.innerHTML=`
-<div class="cards">
-${kpi("Operating Margin",pct((r-c)/r*100))}
-${kpi("Projects Requiring Attention",projects.filter(p=>p.status!=="On Track").length)}
-${kpi("Funding Disbursement",pct(d/a*100))}
-${kpi("Automation Success",pct(success))}
-</div>
-<div class="grid2">
-${panel("Strategic Performance Indicators",cv("e1"))}
-${panel("Project Delivery Health",cv("e2"))}
-${panel("Financial Trend",cv("e3"))}
-${panel("Funding by Programme",cv("e4"))}
-</div>
-${panel("Executive Management Summary",insights([
-"Portfolio delivery: "+onTrack+" of "+projects.length+" projects are On Track.",
-"Financial performance: operating margin is "+pct((r-c)/r*100)+".",
-"Funding governance: "+pct(d/a*100)+" of approved grant funding has been disbursed.",
-"Automation performance: weighted transaction success rate is "+pct(success)+"."
-]))}
-<div class="notice">These are independent synthetic business scenarios and should not be interpreted as consolidated financial statements.</div>`;
-plot("e1","bar",["Operating Margin","On Track Projects","Funding Disbursed","Automation Success"],[
-{label:"Performance %",data:[(r-c)/r*100,onTrack/projects.length*100,d/a*100,success],backgroundColor:[color.blue,color.teal,color.amber,color.purple]}
-],{indexAxis:"y",scales:{x:{min:0,max:100,ticks:{color:"#aabdd2"}},y:{ticks:{color:"#aabdd2"}}}});
-plot("e2","doughnut",["On Track","At Risk","Delayed"],[
-{data:[4,2,2],backgroundColor:[color.teal,color.amber,color.red]}
-]);
-plot("e3","line",months,[
-{label:"Revenue (S$000)",data:revenue,borderColor:color.blue},
-{label:"Costs (S$000)",data:costs,borderColor:color.red}
-]);
-plot("e4","bar",grants.map(g=>g.name),[
-{label:"Disbursed",data:grants.map(g=>g.disbursed),backgroundColor:color.teal}
-],{indexAxis:"y"});
+  const r=revenue.reduce((a,b)=>a+b,0);
+  const c=costs.reduce((a,b)=>a+b,0);
+  const a=sum(grants,"approved"),d=sum(grants,"disbursed");
+  const runs=sum(workflows,"runs");
+  const success=workflows.reduce((s,w)=>s+w.runs*w.success/100,0)/runs;
+  const onTrack=projects.filter(p=>p.status==="On Track").length;
+  el.innerHTML=`
+    <div class="cards">
+      ${card("Operating Margin",pct((r-c)/r*100))}
+      ${card("Projects Requiring Attention",projects.length-onTrack)}
+      ${card("Funding Disbursement",pct(d/a*100))}
+      ${card("Automation Success",pct(success))}
+    </div>
+    <div class="grid2">
+      ${panel("Strategic Performance Indicators",canvas("e1"))}
+      ${panel("Project Delivery Health",canvas("e2"))}
+      ${panel("Financial Trend",canvas("e3"))}
+      ${panel("Funding by Programme",canvas("e4"))}
+    </div>
+    ${panel("Executive Management Summary",insights([
+      onTrack+" of "+projects.length+" projects are On Track.",
+      "Operating margin: "+pct((r-c)/r*100),
+      "Funding disbursement: "+pct(d/a*100),
+      "Automation success rate: "+pct(success)
+    ]))}
+    <div class="notice">These are independent synthetic business scenarios, not consolidated financial statements. Click a chart to explore the related dashboard.</div>`;
+  plot("e1","bar",["Operating Margin","On Track Projects","Funding Disbursed","Automation Success"],[{
+    label:"Performance %",
+    data:[(r-c)/r*100,onTrack/projects.length*100,d/a*100,success],
+    backgroundColor:[colors.blue,colors.teal,colors.amber,colors.purple]
+  }],{
+    indexAxis:"y",
+    scales:{x:{min:0,max:115,ticks:{color:"#aabdd2"}},y:{ticks:{color:"#aabdd2"}}},
+    plugins:{datalabels:{formatter:v=>pct(v),anchor:"end",align:"end"}}
+  });
+  plot("e2","doughnut",["On Track","At Risk","Delayed"],[{
+    data:["On Track","At Risk","Delayed"].map(s=>projects.filter(p=>p.status===s).length),
+    backgroundColor:[colors.teal,colors.amber,colors.red]
+  }]);
+  plot("e3","line",months,[
+    {label:"Revenue (S$000)",data:revenue,borderColor:colors.blue},
+    {label:"Costs (S$000)",data:costs,borderColor:colors.red}
+  ]);
+  plot("e4","bar",grants.map(g=>g.name),[{label:"Disbursed",data:grants.map(g=>g.disbursed),backgroundColor:colors.teal}],{indexAxis:"y"});
 }
 
-render();
+/* START THE DASHBOARD */
+go("overview");
 </script>
 </body>
 </html>
